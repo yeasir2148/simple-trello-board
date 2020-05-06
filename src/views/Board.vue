@@ -52,12 +52,6 @@ export default {
       Task,
       TrelloColumn
    },
-   // created() {
-   //    let taskModel = [];
-   //    for (const column of this.board.columns) {
-   //       this.newTask.push(createFreshTask());
-   //    }
-   // },
    computed: mapState(["board"]),
    methods: {
       onDragOver(ev) {
@@ -107,10 +101,6 @@ export default {
 </script>
 
 <style lang="css">
-.task {
-   @apply flex items-center flex-wrap shadow mb-2 py-2 px-2 rounded bg-white text-grey-darkest no-underline;
-}
-
 .board {
    @apply p-4 bg-teal-dark h-full overflow-auto;
 }

@@ -24,4 +24,7 @@ export default {
 </script>
 
 <style>
+.task {
+   @apply flex items-center flex-wrap shadow mb-2 py-2 px-2 rounded bg-white text-grey-darkest no-underline;
+}
 </style>
