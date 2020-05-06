@@ -29,6 +29,7 @@
 import { uuid } from "@/utils";
 import { mapActions } from "vuex";
 import TrelloTask from "@/components/TrelloTask.vue";
+import methodsMixin from "@/mixins/methodsMixin.js";
 
 function createFreshTask() {
    return {
@@ -38,7 +39,9 @@ function createFreshTask() {
       userAssigned: null
    };
 }
+
 export default {
+   mixins: [methodsMixin],
    components: {
       TrelloTask
    },
@@ -68,47 +71,12 @@ export default {
       openTask: function(task) {
          this.$router.push({ name: "task", params: { id: task.id } });
       },
-      pickupColumn(columnIndexToMove, ev) {
-         console.log(columnIndexToMove);
-         ev.dataTransfer.setData("objectType", "column");
-         ev.dataTransfer.setData("column_to_move", columnIndexToMove);
-
-         ev.dataTransfer.dropEffect = "move";
-         ev.dataTransfer.effectAllowed = "move";
-      },
-      onDragOver(ev) {
-         ev.preventDefault();
-         ev.dataTransfer.dropEffect = "move";
-      },
       pickupTask(taskIndex, columnIndex, ev) {
          ev.dataTransfer.setData("task_index", taskIndex);
          ev.dataTransfer.setData("from_column_index", columnIndex);
          ev.dataTransfer.setData("objectType", "task");
          ev.dataTransfer.dropEffect = "move";
       },
-      dropTaskorColumn(columnToIndex, taskToIndex, ev) {
-         const taskIndex = ev.dataTransfer.getData("task_index");
-         const fromColumnIndex = ev.dataTransfer.getData("from_column_index");
-
-         if (ev.dataTransfer.getData("objectType") == "task") {
-            // console.log('to move:' + taskIndex);
-            // console.log('from col:' + fromColumnIndex);
-            // console.log('to task:' + taskToIndex);
-            // console.log('to col:' + columnToIndex);
-            this.$store.commit("MOVE_TASK", {
-               taskIndex,
-               columnFromIndex: fromColumnIndex,
-               taskToIndex,
-               columnToIndex
-            });
-         } else {
-            const moveColumnIndex = ev.dataTransfer.getData("column_to_move");
-            this.$store.commit("MOVE_COLUMN", {
-               columnToIndex,
-               moveColumnIndex
-            });
-         }
-      }
    }
 };
 </script>

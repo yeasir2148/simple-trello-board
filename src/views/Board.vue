@@ -31,20 +31,12 @@ import { mapState } from "vuex";
 import { uuid } from "@/utils";
 import Task from "@/views/Task.vue";
 import TrelloColumn from "@/components/TrelloColumn.vue";
-
-function createFreshTask() {
-   return {
-      name: null,
-      id: uuid(),
-      description: null,
-      userAssigned: null
-   };
-}
+import methodsMixin from "@/mixins/methodsMixin.js";
 
 export default {
+   mixins: [methodsMixin],
    data() {
       return {
-         count: 0,
          newColumnName: ''
       };
    },
@@ -54,33 +46,6 @@ export default {
    },
    computed: mapState(["board"]),
    methods: {
-      onDragOver(ev) {
-         ev.preventDefault();
-         ev.dataTransfer.dropEffect = 'move';
-      },
-      dropTaskorColumn(columnToIndex, taskToIndex, ev) {
-         const taskIndex = ev.dataTransfer.getData('task_index');
-         const fromColumnIndex = ev.dataTransfer.getData('from_column_index');
-
-            if(ev.dataTransfer.getData('objectType') == 'task') {
-               // console.log('to move:' + taskIndex);
-               // console.log('from col:' + fromColumnIndex);
-               // console.log('to task:' + taskToIndex);
-               // console.log('to col:' + columnToIndex);
-               this.$store.commit('MOVE_TASK', {
-                  taskIndex,
-                  columnFromIndex: fromColumnIndex,
-                  taskToIndex,
-                  columnToIndex
-               })
-            } else {
-               const moveColumnIndex = ev.dataTransfer.getData('column_to_move');
-               this.$store.commit('MOVE_COLUMN', {
-                  columnToIndex,
-                  moveColumnIndex
-               });
-            }
-      },
       pickupColumn(columnIndexToMove, ev) {
          console.log(columnIndexToMove);
          ev.dataTransfer.setData('objectType', 'column');
@@ -90,7 +55,6 @@ export default {
          ev.dataTransfer.effectAllowed = 'move';
       },
       createColumn() {
-         // this.newTask.push(createFreshTask());
          this.$store.commit('ADD_COLUMN', {
             name: this.newColumnName
          });
