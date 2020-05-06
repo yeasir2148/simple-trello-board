@@ -1,22 +1,31 @@
 <template>
    <div class="board">
       <div class="flex flex-row items-start">
-         <TrelloColumn 
+         <AppDraggable
             v-for="(column, $columnIndex) of board.columns"
-            :column="column"
-            :columnIndex="$columnIndex"
             :key="$columnIndex"
-            draggable
-            @dragover="onDragOver"
-            @drop="dropTaskorColumn($columnIndex, column.tasks.length, $event)"
-            @dragstart="pickupColumn($columnIndex, $event)"
-         ></TrelloColumn>
+            :columnIndex="$columnIndex"
+            :dragInfo="{column, columnIndex: $columnIndex, type: 'column'}"
+         >
+            <AppDropable
+               :columnIndex="$columnIndex"
+            >
+               <TrelloColumn 
+                  :column="column" 
+                  :columnIndex="$columnIndex">
+               </TrelloColumn>
+            </AppDropable>
+         </AppDraggable>
+
          <div class="column flex">
-            <input type="text" name="newColumnName"
+            <input
+               type="text"
+               name="newColumnName"
                class="p2 mr-2 flex-grow"
                v-model="newColumnName"
                placeholder="+new column name"
-               @keyup.enter="createColumn">
+               @keyup.enter="createColumn"
+            />
          </div>
       </div>
 
@@ -31,35 +40,29 @@ import { mapState } from "vuex";
 import { uuid } from "@/utils";
 import Task from "@/views/Task.vue";
 import TrelloColumn from "@/components/TrelloColumn.vue";
-import methodsMixin from "@/mixins/methodsMixin.js";
+import AppDraggable from "@/components/AppDraggable.vue";
+import AppDropable from "@/components/AppDropable.vue";
 
 export default {
-   mixins: [methodsMixin],
    data() {
       return {
-         newColumnName: ''
+         newColumnName: ""
       };
    },
    components: {
       Task,
-      TrelloColumn
+      TrelloColumn,
+      AppDraggable,
+      AppDropable
    },
    computed: mapState(["board"]),
    methods: {
-      pickupColumn(columnIndexToMove, ev) {
-         console.log(columnIndexToMove);
-         ev.dataTransfer.setData('objectType', 'column');
-         ev.dataTransfer.setData('column_to_move', columnIndexToMove);
-
-         ev.dataTransfer.dropEffect = 'move';
-         ev.dataTransfer.effectAllowed = 'move';
-      },
       createColumn() {
-         this.$store.commit('ADD_COLUMN', {
+         this.$store.commit("ADD_COLUMN", {
             name: this.newColumnName
          });
-         this.newColumnName = '';
-      },
+         this.newColumnName = "";
+      }
    }
 };
 </script>

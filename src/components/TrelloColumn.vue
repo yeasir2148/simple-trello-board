@@ -1,18 +1,23 @@
 <template>
-   <div class="column" v-on="$listeners">
+   <div class="column">
       <div class="flex items-center mb-2 font-bold">{{ column.name }}</div>
       <div class="list-reset">
-         <TrelloTask
+         <AppDraggable
             v-for="(task, $taskIndex) of column.tasks"
-            :task="task"
-            :taskIndex="$taskIndex"
             :key="$taskIndex"
-            @click="openTask(task)"
-            draggable
-            @dragover="onDragOver"
-            @drop.stop="dropTaskorColumn(columnIndex, $taskIndex, $event)"
-            @dragstart.stop="pickupTask($taskIndex, columnIndex, $event)"
-         ></TrelloTask>
+            :taskIndex="$taskIndex"
+            :columnIndex="columnIndex"
+            :dragInfo="{task, taskIndex: $taskIndex, type: 'task'}">
+            <AppDropable
+               :taskIndex="$taskIndex"
+               :columnIndex="columnIndex">
+               <TrelloTask
+                  :task="task"
+                  :taskIndex="$taskIndex"
+                  @click="openTask(task)"
+               ></TrelloTask>
+            </AppDropable>
+         </AppDraggable>
       </div>
       <input
          type="text"
@@ -29,7 +34,8 @@
 import { uuid } from "@/utils";
 import { mapActions } from "vuex";
 import TrelloTask from "@/components/TrelloTask.vue";
-import methodsMixin from "@/mixins/methodsMixin.js";
+import AppDraggable from "@/components/AppDraggable.vue";
+import AppDropable from "@/components/AppDropable.vue";
 
 function createFreshTask() {
    return {
@@ -41,9 +47,10 @@ function createFreshTask() {
 }
 
 export default {
-   mixins: [methodsMixin],
    components: {
-      TrelloTask
+      TrelloTask,
+      AppDraggable,
+      AppDropable
    },
    data() {
       return {
@@ -70,12 +77,6 @@ export default {
       },
       openTask: function(task) {
          this.$router.push({ name: "task", params: { id: task.id } });
-      },
-      pickupTask(taskIndex, columnIndex, ev) {
-         ev.dataTransfer.setData("task_index", taskIndex);
-         ev.dataTransfer.setData("from_column_index", columnIndex);
-         ev.dataTransfer.setData("objectType", "task");
-         ev.dataTransfer.dropEffect = "move";
       },
    }
 };

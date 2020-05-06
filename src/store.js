@@ -5,7 +5,7 @@ import { saveStatePlugin } from './utils'
 
 Vue.use(Vuex)
 
-// localStorage.removeItem('board');
+localStorage.removeItem('board');
 const board = JSON.parse(localStorage.getItem('board')) || defaultBoard
 
 export default new Vuex.Store({
@@ -37,6 +37,7 @@ export default new Vuex.Store({
          payload.task[payload.prop] = payload.value;
       },
       MOVE_TASK({board: {columns}}, payload) {
+         console.log(payload);
          const taskToMove = columns[payload.columnFromIndex].tasks.splice(payload.taskIndex, 1)[0];
          if(payload.columnFromIndex == payload.columnToIndex) {
             columns[payload.columnToIndex].tasks.splice(payload.taskToIndex, 0, taskToMove);
