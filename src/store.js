@@ -5,7 +5,7 @@ import { saveStatePlugin } from './utils'
 
 Vue.use(Vuex)
 
-localStorage.removeItem('board');
+// localStorage.removeItem('board');
 const board = JSON.parse(localStorage.getItem('board')) || defaultBoard
 
 export default new Vuex.Store({
