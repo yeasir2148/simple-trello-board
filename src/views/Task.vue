@@ -1,17 +1,17 @@
 <template>
-   <div class="task-view" @click="$event.stopPropagation()">
-      <div class="flex flex-col flex-grow justify-between px-4">
-         <div class="font-black">Task Name: <span class="font-medium">{{task.name}}</span></div>
+      <div class="task-view" @click="$event.stopPropagation()">
+         <div class="flex flex-col flex-grow justify-between px-4">
+            <div class="font-black">Task Name: <span class="font-medium">{{task.name}}</span></div>
 
-         <textarea
-            class="relative bg-transparent px-2 border mt-2 h-64 border-none leading-normal"
-            :value="task.description"
-            @keyup.enter="updateTask(task, 'description', $event)" @blur="updateTask(task, 'description', $event)"
-            placeholder="Task description">
-         </textarea>
+            <textarea
+               class="relative bg-transparent px-2 border mt-2 h-64 border-none leading-normal"
+               :value="task.description"
+               @keyup.enter="updateTask(task, 'description', $event)" @blur="updateTask(task, 'description', $event)"
+               placeholder="Task description">
+            </textarea>
+         </div>
       </div>
-   </div>
-</template>
+   </template>
 
 <script>
 import { mapGetters } from 'vuex';

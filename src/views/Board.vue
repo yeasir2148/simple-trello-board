@@ -29,9 +29,11 @@
          </div>
       </div>
 
-      <div class="task-bg" v-if="$route.name == 'task'" @click="$router.push('/')">
-         <router-view></router-view>
-      </div>
+      <transition name="fade-slide" mode="out-in">
+         <div class="task-bg" v-if="$route.name == 'task'" @click="$router.push('/')">
+            <router-view></router-view>
+         </div>
+      </transition>
    </div>
 </template>
 
@@ -75,5 +77,20 @@ export default {
 .task-bg {
    @apply pin absolute;
    background: rgba(0, 0, 0, 0.5);
+}
+
+.fade-slide-enter {
+   opacity: 0;
+   transform: translateX(100%);
+}
+
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+   transition: all 0.2s ease-out;
+}
+
+.fade-slide-leave-to {
+   opacity: 1;
+   transform: translateX(-100%);
 }
 </style>
