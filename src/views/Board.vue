@@ -86,11 +86,35 @@ export default {
 
 .fade-slide-enter-active,
 .fade-slide-leave-active {
-   transition: all 0.2s ease-out;
+   transition: all 0.3s ease-out;
 }
 
 .fade-slide-leave-to {
    opacity: 1;
    transform: translateX(-100%);
 }
+
+.slide-fade-enter {
+   opacity: 0;
+   transform: translateX(-50%);
+}
+
+.slide-fade-enter-active,
+.slide-fade-right-enter-active
+{
+   transition: all 0.3s;
+}
+
+.slide-fade-right-enter {
+   opacity: 0;
+   transform: translateX(50%);
+}
+
+.slide-fade-move, .slide-fade-right-move {
+   transition: transform 1s;
+}
+/* .slide-fade-right-leave-to {
+   opacity: 1;
+   transform: translateX(50%);
+} */
 </style>

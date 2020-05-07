@@ -2,22 +2,25 @@
    <div class="column">
       <div class="flex items-center mb-2 font-bold">{{ column.name }}</div>
       <div class="list-reset">
-         <AppDraggable
-            v-for="(task, $taskIndex) of column.tasks"
-            :key="$taskIndex"
-            :taskIndex="$taskIndex"
-            :columnIndex="columnIndex"
-            :dragInfo="{task, taskIndex: $taskIndex, type: 'task'}">
-            <AppDropable
+         <transition-group :name="taskListTransitionName">
+            <AppDraggable
+               v-for="(task, $taskIndex) of column.tasks"
+               :key="$taskIndex"
                :taskIndex="$taskIndex"
-               :columnIndex="columnIndex">
-               <TrelloTask
-                  :task="task"
+               :columnIndex="columnIndex"
+               :dragInfo="{task, taskIndex: $taskIndex, type: 'task'}">
+               <AppDropable v-on:change-transition-class-name="changeTransitionClassName"
                   :taskIndex="$taskIndex"
-                  @click="openTask(task)"
-               ></TrelloTask>
-            </AppDropable>
-         </AppDraggable>
+                  :columnIndex="columnIndex">
+                  <TrelloTask
+                     :task="task"
+                     :taskIndex="$taskIndex"
+                     @click="openTask(task)"
+                  ></TrelloTask>
+               </AppDropable>
+            </AppDraggable>
+         </transition-group>
+
       </div>
       <input
          type="text"
@@ -54,7 +57,8 @@ export default {
    },
    data() {
       return {
-         newTask: createFreshTask()
+         newTask: createFreshTask(),
+         taskListTransitionName: "slide-fade"
       };
    },
    props: {
@@ -72,12 +76,16 @@ export default {
       createTask(taskAttr) {
          const { index } = taskAttr;
          this.addNewTask(taskAttr);
-         this.$router.push({ name: "task", params: { id: this.newTask.id } });
+         // this.$router.push({ name: "task", params: { id: this.newTask.id } });
          this.newTask = createFreshTask();
       },
       openTask: function(task) {
          this.$router.push({ name: "task", params: { id: task.id } });
       },
+      changeTransitionClassName(transitionClassName) {
+         console.log(this.taskListTransitionName);
+         this.taskListTransitionName = transitionClassName;
+      }
    }
 };
 </script>

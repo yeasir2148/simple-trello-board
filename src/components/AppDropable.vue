@@ -18,6 +18,10 @@ export default {
          const fromColumnIndex = ev.dataTransfer.getData("from_column_index") || null;
 
          if (ev.dataTransfer.getData("objectType") == "task") {
+            fromColumnIndex > this.columnIndex ?
+               this.$emit('change-transition-class-name', 'slide-fade-right')
+               :this.$emit('change-transition-class-name', 'slide-fade');
+         
             this.$store.commit("MOVE_TASK", {
                taskIndex,
                columnFromIndex: fromColumnIndex,
