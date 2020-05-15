@@ -1,3 +1,10 @@
+A basic replica of a trello board. You can 
+
+* create new tasks
+* create new columns
+* drag move tasks between columns and within column
+* drag whole column
+
 ## Project setup
 ```
 npm install
